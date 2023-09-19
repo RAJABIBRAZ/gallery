@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Add build commands here
+            }
+        }
+
+        stage('Test') {
+            steps {
+                // Add test commands here
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Add deployment commands here
+            }
+        }
+    }
+
+    post {
+        success {
+            // Notification or additional steps on success
+        }
+        failure {
+            // Notification or additional steps on failure
+        }
+    }
+}
