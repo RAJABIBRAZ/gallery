@@ -8,31 +8,31 @@ pipeline {
             }
         }
 
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
         stage('Build') {
             steps {
-                // Add build commands here
+                sh 'npm run build'
             }
         }
 
-        stage('Test') {
+        stage('Deploy to Render') {
             steps {
-                // Add test commands here
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                // Add deployment commands here
+                sh 'npm start'
             }
         }
     }
 
     post {
         success {
-            // Notification or additional steps on success
+            echo 'Pipeline succeeded! Deployed to Render.'
         }
         failure {
-            // Notification or additional steps on failure
+            echo 'Pipeline failed! Deployment to Render unsuccessful.'
         }
     }
 }
