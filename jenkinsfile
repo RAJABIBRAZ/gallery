@@ -1,19 +1,40 @@
 pipeline {
     agent any
-    tools {
-    gradle "Gradle-6"
-  }
-    stages {
 
-        stage('Build project') {
+    stages {
+        stage('Checkout') {
             steps {
-                 sh 'gradle build'
+                checkout scm
             }
         }
-        stage('Tests') {
+
+        stage('Build') {
             steps {
-                sh 'gradle test'
+                sh 'npm install'
             }
         }
+
+        stage('Run Tests') {
+            steps {
+                sh 'npm test'
+
+                post {
+                    failure {
+                        emailext(
+                            subject: "Test Failed: ${currentBuild.fullDisplayName}",
+                            body: "Test failed for ${currentBuild.fullDisplayName}. Please investigate.",
+                            to: 'a.ibrahimrajab@gmail.com',
+                            replyTo: 'a.ibrahimrajab@gmail.com',
+                            mimeType: 'text/plain',
+                            recipientProviders: [[$class: 'CulpritsRecipientProvider']]
+                        )
+                    }
+                }
+            }
+        }
+
+
     }
+
+
 }
