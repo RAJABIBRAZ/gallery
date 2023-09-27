@@ -4,6 +4,7 @@ pipeline {
     environment {
         SLACK_CHANNEL = '#abdulhakim_ip1'
         SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/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'
+        RENDER_DEPLOY_URL = 'https://rajab@heroku.com'
     }
 
     stages {
@@ -42,6 +43,12 @@ pipeline {
                 }
             }
         }
+        stage('Deploy') {
+                    steps {
+
+                        sh 'export RENDER_DEPLOY_URL=https://rajab@heroku.com'
+                    }
+                }
 
 
     }
@@ -50,9 +57,11 @@ pipeline {
         success {
 
             slackSend(
-                color: 'good',  // Message color (green for success)
-                channel: env.SLACK_CHANNEL,
-                message: "Deployment successful for ${currentBuild.fullDisplayName}",
+                            color: 'good',  // Message color (green for success)
+                            channel: env.SLACK_CHANNEL,
+                            message: "Deployment successful for ${currentBuild.fullDisplayName}\n" +
+                                     "Build ID: ${BUILD_NUMBER}\n" +
+                                     "Render Deployment URL: ${env.RENDER_DEPLOY_URL}",
                 tokenCredentialId: 'a52IuBLZnPdv44vHagfcHn8t'
             )
         }
