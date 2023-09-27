@@ -1,38 +1,19 @@
 pipeline {
     agent any
-
+    tools {
+    gradle "Gradle-6"
+  }
     stages {
-        stage('Checkout') {
+
+        stage('Build project') {
             steps {
-                checkout scm
+                 sh 'gradle build'
             }
         }
-
-        stage('Install Dependencies') {
+        stage('Tests') {
             steps {
-                sh 'npm install'
+                sh 'gradle test'
             }
-        }
-
-        stage('Build') {
-            steps {
-                sh 'npm run build'
-            }
-        }
-
-        stage('Deploy to Render') {
-            steps {
-                sh 'npm start'
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'Pipeline succeeded! Deployed to Render.'
-        }
-        failure {
-            echo 'Pipeline failed! Deployment to Render unsuccessful.'
         }
     }
 }
